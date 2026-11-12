@@ -1,0 +1,596 @@
+{
+  "label": "1-bioclamp",
+  "conditions": {
+    "date": "2026-11-12T16:28:17.149Z",
+    "machine": "AMD Ryzen 5 5500U with Radeon Graphics, 12 потоків, 7.3 ГБ RAM, win32 10.0.26200",
+    "browser": "Chrome/157.0.8103.78",
+    "headless": true,
+    "profile": "чистий тимчасовий профіль без розширень, окремий incognito-контекст на кожен запуск",
+    "load": "CPU 4x, мережа Fast 4G (165 ms, 8.1 Mbps), кеш вимкнено, вікно 1366x768",
+    "interactions": "CPU 4x, без network throttling, вікно 1366x768",
+    "lighthouse": "Lighthouse Navigation, Desktop, applied (DevTools) throttling: мережа без обмежень, CPU 1x",
+    "runs": 5
+  },
+  "url": "http://localhost:4173/",
+  "scenarios": {
+    "lighthouse": {
+      "median": {
+        "score": 30,
+        "fcp": 1822.072,
+        "lcp": 1877.724,
+        "tbt": 1469.416,
+        "cls": 0.7160648148148148,
+        "si": 1810,
+        "bytes": 23021329
+      },
+      "runs": [
+        {
+          "score": 30,
+          "fcp": 1822.072,
+          "lcp": 1870.773,
+          "tbt": 1466.486,
+          "cls": 0.7160648148148148,
+          "si": 1801,
+          "bytes": 23021329
+        },
+        {
+          "score": 29,
+          "fcp": 1855.113,
+          "lcp": 1888.472,
+          "tbt": 1469.416,
+          "cls": 0.7160648148148148,
+          "si": 1830,
+          "bytes": 23021329
+        },
+        {
+          "score": 53,
+          "fcp": 1861.086,
+          "lcp": 1877.724,
+          "tbt": 1528.0029999999997,
+          "cls": 0,
+          "si": 1810,
+          "bytes": 23021329
+        },
+        {
+          "score": 17,
+          "fcp": 1716.433,
+          "lcp": 2965.248,
+          "tbt": 1711.036000000001,
+          "cls": 0.7160648148148148,
+          "si": 2973,
+          "bytes": 23021329
+        },
+        {
+          "score": 53,
+          "fcp": 1760.091,
+          "lcp": 1793.416,
+          "tbt": 1430.8489999999995,
+          "cls": 0.06769351694977088,
+          "si": 1728,
+          "bytes": 23021329
+        }
+      ]
+    },
+    "load": {
+      "median": {
+        "lcp": 17600,
+        "cls": 0.4821788067349927,
+        "longTasksTotal": 9831,
+        "blocking": 9631,
+        "bytes": 23021329,
+        "requests": 41
+      },
+      "runs": [
+        {
+          "lcp": 18084,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 10326,
+          "blocking": 10126,
+          "bytes": 23021329,
+          "requests": 41,
+          "lcpElement": "img.hero__image"
+        },
+        {
+          "lcp": 17464,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 9692,
+          "blocking": 9492,
+          "bytes": 23021329,
+          "requests": 41,
+          "lcpElement": "img.hero__image"
+        },
+        {
+          "lcp": 17600,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 9831,
+          "blocking": 9631,
+          "bytes": 23021329,
+          "requests": 41,
+          "lcpElement": "img.hero__image"
+        },
+        {
+          "lcp": 17512,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 9810,
+          "blocking": 9560,
+          "bytes": 23021329,
+          "requests": 41,
+          "lcpElement": "img.hero__image"
+        },
+        {
+          "lcp": 19580,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 9835,
+          "blocking": 9635,
+          "bytes": 23021329,
+          "requests": 41,
+          "lcpElement": "img.hero__image"
+        }
+      ]
+    },
+    "type": {
+      "median": {
+        "inp": 2848,
+        "keyMedian": 712,
+        "longTasksTotal": 8203,
+        "blocking": 7753
+      },
+      "runs": [
+        {
+          "inp": 2848,
+          "keyMedian": 716,
+          "longTasksTotal": 6018,
+          "blocking": 5718
+        },
+        {
+          "inp": 2848,
+          "keyMedian": 708,
+          "longTasksTotal": 7948,
+          "blocking": 7648
+        },
+        {
+          "inp": 2872,
+          "keyMedian": 692,
+          "longTasksTotal": 8203,
+          "blocking": 7753
+        },
+        {
+          "inp": 2872,
+          "keyMedian": 740,
+          "longTasksTotal": 8360,
+          "blocking": 7960
+        },
+        {
+          "inp": 2832,
+          "keyMedian": 712,
+          "longTasksTotal": 10098,
+          "blocking": 9648
+        }
+      ]
+    },
+    "favorite": {
+      "median": {
+        "inp": 2528,
+        "clickMedian": 2156,
+        "longTasksTotal": 14117,
+        "blocking": 13417
+      },
+      "runs": [
+        {
+          "inp": 3000,
+          "clickMedian": 2144,
+          "longTasksTotal": 14117,
+          "blocking": 13417
+        },
+        {
+          "inp": 2520,
+          "clickMedian": 2156,
+          "longTasksTotal": 13702,
+          "blocking": 12902
+        },
+        {
+          "inp": 2664,
+          "clickMedian": 2372,
+          "longTasksTotal": 15012,
+          "blocking": 14312
+        },
+        {
+          "inp": 2528,
+          "clickMedian": 2404,
+          "longTasksTotal": 14988,
+          "blocking": 14238
+        },
+        {
+          "inp": 2200,
+          "clickMedian": 1960,
+          "longTasksTotal": 12199,
+          "blocking": 11499
+        }
+      ]
+    },
+    "details": {
+      "median": {
+        "inp": 2296,
+        "openMedian": 2072,
+        "closeMedian": 1912,
+        "longTasksTotal": 13061,
+        "blocking": 12011
+      },
+      "runs": [
+        {
+          "inp": 2224,
+          "openMedian": 2072,
+          "closeMedian": 1912,
+          "longTasksTotal": 13061,
+          "blocking": 12011
+        },
+        {
+          "inp": 2336,
+          "openMedian": 2072,
+          "closeMedian": 1888,
+          "longTasksTotal": 12921,
+          "blocking": 11871
+        },
+        {
+          "inp": 2280,
+          "openMedian": 2224,
+          "closeMedian": 1928,
+          "longTasksTotal": 13369,
+          "blocking": 12269
+        },
+        {
+          "inp": 2352,
+          "openMedian": 2064,
+          "closeMedian": 1896,
+          "longTasksTotal": 13035,
+          "blocking": 11935
+        },
+        {
+          "inp": 2296,
+          "openMedian": 2160,
+          "closeMedian": 1912,
+          "longTasksTotal": 13194,
+          "blocking": 12144
+        }
+      ]
+    },
+    "scroll": {
+      "median": {
+        "longTasksTotal": 12425,
+        "longTasksCount": 28,
+        "longTaskMax": 1385,
+        "blocking": 11025,
+        "wallTime": 16541
+      },
+      "runs": [
+        {
+          "longTasksTotal": 12957,
+          "longTasksCount": 30,
+          "longTaskMax": 1438,
+          "blocking": 11457,
+          "wallTime": 18251
+        },
+        {
+          "longTasksTotal": 10201,
+          "longTasksCount": 27,
+          "longTaskMax": 1362,
+          "blocking": 8851,
+          "wallTime": 16915
+        },
+        {
+          "longTasksTotal": 12425,
+          "longTasksCount": 28,
+          "longTaskMax": 1379,
+          "blocking": 11025,
+          "wallTime": 16541
+        },
+        {
+          "longTasksTotal": 10890,
+          "longTasksCount": 28,
+          "longTaskMax": 1445,
+          "blocking": 9490,
+          "wallTime": 16095
+        },
+        {
+          "longTasksTotal": 13529,
+          "longTasksCount": 29,
+          "longTaskMax": 1385,
+          "blocking": 12079,
+          "wallTime": 16356
+        }
+      ]
+    }
+  },
+  "before": {
+    "url": "http://localhost:4175/",
+    "scenarios": {
+      "lighthouse": {
+        "median": {
+          "score": 42,
+          "fcp": 1995.705,
+          "lcp": 3009.357,
+          "tbt": 1468.2140000000004,
+          "cls": 0,
+          "si": 2225,
+          "bytes": 23021145
+        },
+        "runs": [
+          {
+            "score": 46,
+            "fcp": 2257.433,
+            "lcp": 2274.071,
+            "tbt": 1468.2140000000004,
+            "cls": 0,
+            "si": 2188,
+            "bytes": 23021145
+          },
+          {
+            "score": 39,
+            "fcp": 2073.357,
+            "lcp": 3288.968,
+            "tbt": 1659.5500000000002,
+            "cls": 0,
+            "si": 2427,
+            "bytes": 23021145
+          },
+          {
+            "score": 50,
+            "fcp": 1995.705,
+            "lcp": 2028.992,
+            "tbt": 1397.1100000000004,
+            "cls": 0,
+            "si": 1940,
+            "bytes": 23021145
+          },
+          {
+            "score": 15,
+            "fcp": 1927.662,
+            "lcp": 3143.349,
+            "tbt": 1609.4219999999998,
+            "cls": 0.7160648148148148,
+            "si": 3206,
+            "bytes": 23021145
+          },
+          {
+            "score": 42,
+            "fcp": 1910.594,
+            "lcp": 3009.357,
+            "tbt": 1466.998000000001,
+            "cls": 0,
+            "si": 2225,
+            "bytes": 23021145
+          }
+        ]
+      },
+      "load": {
+        "median": {
+          "lcp": 19872,
+          "cls": 0.4821788067349927,
+          "longTasksTotal": 10709,
+          "blocking": 10509,
+          "bytes": 23021145,
+          "requests": 41
+        },
+        "runs": [
+          {
+            "lcp": 20464,
+            "cls": 0.4821788067349927,
+            "longTasksTotal": 11087,
+            "blocking": 10887,
+            "bytes": 23021145,
+            "requests": 41,
+            "lcpElement": "img.hero__image"
+          },
+          {
+            "lcp": 19792,
+            "cls": 0.4821788067349927,
+            "longTasksTotal": 10556,
+            "blocking": 10356,
+            "bytes": 23021145,
+            "requests": 41,
+            "lcpElement": "img.hero__image"
+          },
+          {
+            "lcp": 19860,
+            "cls": 0.4821788067349927,
+            "longTasksTotal": 10709,
+            "blocking": 10509,
+            "bytes": 23021145,
+            "requests": 41,
+            "lcpElement": "img.hero__image"
+          },
+          {
+            "lcp": 19872,
+            "cls": 0.4821788067349927,
+            "longTasksTotal": 10490,
+            "blocking": 10290,
+            "bytes": 23021145,
+            "requests": 41,
+            "lcpElement": "img.hero__image"
+          },
+          {
+            "lcp": 20696,
+            "cls": 0.4821788067349927,
+            "longTasksTotal": 11358,
+            "blocking": 11158,
+            "bytes": 23021145,
+            "requests": 41,
+            "lcpElement": "img.hero__image"
+          }
+        ]
+      },
+      "type": {
+        "median": {
+          "inp": 2856,
+          "keyMedian": 712,
+          "longTasksTotal": 8041,
+          "blocking": 7641
+        },
+        "runs": [
+          {
+            "inp": 2856,
+            "keyMedian": 756,
+            "longTasksTotal": 8277,
+            "blocking": 7877
+          },
+          {
+            "inp": 2984,
+            "keyMedian": 712,
+            "longTasksTotal": 6301,
+            "blocking": 5951
+          },
+          {
+            "inp": 2960,
+            "keyMedian": 728,
+            "longTasksTotal": 9197,
+            "blocking": 8797
+          },
+          {
+            "inp": 2808,
+            "keyMedian": 700,
+            "longTasksTotal": 7582,
+            "blocking": 7282
+          },
+          {
+            "inp": 2832,
+            "keyMedian": 684,
+            "longTasksTotal": 8041,
+            "blocking": 7641
+          }
+        ]
+      },
+      "favorite": {
+        "median": {
+          "inp": 2808,
+          "clickMedian": 2552,
+          "longTasksTotal": 15925,
+          "blocking": 15275
+        },
+        "runs": [
+          {
+            "inp": 2680,
+            "clickMedian": 2388,
+            "longTasksTotal": 14940,
+            "blocking": 14090
+          },
+          {
+            "inp": 2720,
+            "clickMedian": 2440,
+            "longTasksTotal": 15195,
+            "blocking": 14395
+          },
+          {
+            "inp": 7400,
+            "clickMedian": 2840,
+            "longTasksTotal": 21953,
+            "blocking": 21103
+          },
+          {
+            "inp": 3088,
+            "clickMedian": 2588,
+            "longTasksTotal": 16479,
+            "blocking": 15829
+          },
+          {
+            "inp": 2808,
+            "clickMedian": 2552,
+            "longTasksTotal": 15925,
+            "blocking": 15275
+          }
+        ]
+      },
+      "details": {
+        "median": {
+          "inp": 2640,
+          "openMedian": 2352,
+          "closeMedian": 2176,
+          "longTasksTotal": 14637,
+          "blocking": 13537
+        },
+        "runs": [
+          {
+            "inp": 2640,
+            "openMedian": 2360,
+            "closeMedian": 2168,
+            "longTasksTotal": 14632,
+            "blocking": 13532
+          },
+          {
+            "inp": 2640,
+            "openMedian": 2336,
+            "closeMedian": 2160,
+            "longTasksTotal": 14531,
+            "blocking": 13431
+          },
+          {
+            "inp": 2624,
+            "openMedian": 2352,
+            "closeMedian": 2176,
+            "longTasksTotal": 14650,
+            "blocking": 13550
+          },
+          {
+            "inp": 2584,
+            "openMedian": 2360,
+            "closeMedian": 2192,
+            "longTasksTotal": 14670,
+            "blocking": 13570
+          },
+          {
+            "inp": 2680,
+            "openMedian": 2352,
+            "closeMedian": 2176,
+            "longTasksTotal": 14637,
+            "blocking": 13537
+          }
+        ]
+      },
+      "scroll": {
+        "median": {
+          "longTasksTotal": 20499,
+          "longTasksCount": 32,
+          "longTaskMax": 1844,
+          "blocking": 18899,
+          "wallTime": 21625
+        },
+        "runs": [
+          {
+            "longTasksTotal": 19619,
+            "longTasksCount": 33,
+            "longTaskMax": 1843,
+            "blocking": 17969,
+            "wallTime": 20729
+          },
+          {
+            "longTasksTotal": 20500,
+            "longTasksCount": 32,
+            "longTaskMax": 1864,
+            "blocking": 18900,
+            "wallTime": 21625
+          },
+          {
+            "longTasksTotal": 20499,
+            "longTasksCount": 32,
+            "longTaskMax": 1844,
+            "blocking": 18899,
+            "wallTime": 21741
+          },
+          {
+            "longTasksTotal": 20393,
+            "longTasksCount": 31,
+            "longTaskMax": 1823,
+            "blocking": 18843,
+            "wallTime": 21610
+          },
+          {
+            "longTasksTotal": 20585,
+            "longTasksCount": 31,
+            "longTaskMax": 1857,
+            "blocking": 19035,
+            "wallTime": 21713
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# Запуск тестів на початковому коді, до виправлення сортування
+# 2026-11-12T15:51:18+02:00
+$ git rev-parse --short HEAD
+ec127d3
+$ git diff --stat HEAD -- src   (порожньо, тобто код не змінений)
+$ git status --short src
+?? src/__tests__/recommendedSort.test.jsx
+$ npx vitest run --reporter=verbose
+
+ RUN  v3.2.7 C:/Projects/Lab-7.-Performance-audit
+
+ ✓ src/__tests__/SearchBar.test.jsx > SearchBar > показує кількість знайдених і передає введений текст 48ms
+ × src/__tests__/recommendedSort.test.jsx > сортування "Рекомендовані" > рахує бал кожного репетитора не більше одного разу, навіть коли користувач шукає і пересортовує 3138ms
+   → expected 13046 to be less than or equal to 200
+ ✓ src/__tests__/recommendedSort.test.jsx > сортування "Рекомендовані" > порядок не змінився: від більшого балу до меншого 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/recommendedSort.test.jsx > сортування "Рекомендовані" > рахує бал кожного репетитора не більше одного разу, навіть коли користувач шукає і пересортовує
+AssertionError: expected 13046 to be less than or equal to 200
+ ❯ src/__tests__/recommendedSort.test.jsx:33:42
+     31| 
+     32|     expect(screen.getByText(`Знайдено ${tutors.length} репетиторів`)).…
+     33|     expect(tutorScore.mock.calls.length).toBeLessThanOrEqual(tutors.le…
+       |                                          ^
+     34|   });
+     35| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 2 passed (3)
+   Start at  15:51:22
+   Duration  6.79s (transform 235ms, setup 1.18s, collect 476ms, tests 3.21s, environment 3.72s, prepare 668ms)
+
