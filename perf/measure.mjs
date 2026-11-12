@@ -7,12 +7,14 @@ import lighthouse, { desktopConfig } from 'lighthouse';
 
 const ALL = ['lighthouse', 'load', 'type', 'favorite', 'details', 'scroll'];
 const args = process.argv.slice(2);
-const label = args.find((a, i) => !a.startsWith('--') && !['--runs', '--only', '--url'].includes(args[i - 1])) || 'run';
+const label = args.find((a, i) => !a.startsWith('--') && !['--runs', '--only', '--url', '--before'].includes(args[i - 1])) || 'run';
 const RUNS = Number(option('--runs', 5));
 const ONLY = option('--only', ALL.join(',')).split(',');
-const TRACE = args.includes('--trace');
+const traceArg = args.find((a) => a === '--trace' || a.startsWith('--trace='));
+const TRACE = traceArg ? (traceArg.includes('=') ? traceArg.split('=')[1].split(',') : ALL) : [];
 const HEADLESS = !args.includes('--headed');
 const URL = option('--url', 'http://localhost:4173/');
+const BEFORE_URL = option('--before', null);
 
 const CPU_SLOWDOWN = 4;
 const VIEWPORT = { width: 1366, height: 768 };
@@ -133,9 +135,9 @@ async function newPage(browser) {
   return { context, page, cdp };
 }
 
-async function openApp(browser) {
+async function openApp(browser, url) {
   const app = await newPage(browser);
-  await app.page.goto(URL, { waitUntil: 'load', timeout: 180000 });
+  await app.page.goto(url, { waitUntil: 'load', timeout: 180000 });
   await settle(app.page, 1500);
   return app;
 }
@@ -207,7 +209,7 @@ async function withTrace(page, file, fn) {
 const durations = (r) => r.interactions.map((i) => i.duration);
 
 const scenarios = {
-  async load(browser, traceFile) {
+  async load(browser, traceFile, url) {
     const { context, page, cdp } = await newPage(browser);
     await cdp.send('Network.enable');
     await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
@@ -219,7 +221,7 @@ const scenarios = {
       requests += 1;
     });
     await withTrace(page, traceFile, async () => {
-      await page.goto(URL, { waitUntil: 'load', timeout: 180000 });
+      await page.goto(url, { waitUntil: 'load', timeout: 180000 });
       await page.waitForSelector('.tutor-card', { timeout: 180000 });
       await page.waitForNetworkIdle({ idleTime: 1500, timeout: 180000 });
       await settle(page, 1000);
@@ -237,8 +239,8 @@ const scenarios = {
     };
   },
 
-  async type(browser, traceFile) {
-    const { context, page, cdp } = await openApp(browser);
+  async type(browser, traceFile, url) {
+    const { context, page, cdp } = await openApp(browser, url);
     const input = await page.$('input[type=search]');
     await clickCenter(page, input);
     await settle(page, 500);
@@ -263,8 +265,8 @@ const scenarios = {
     };
   },
 
-  async favorite(browser, traceFile) {
-    const { context, page } = await openApp(browser);
+  async favorite(browser, traceFile, url) {
+    const { context, page } = await openApp(browser, url);
     await scrollToGrid(page);
     await markStart(page);
     await withTrace(page, traceFile, async () => {
@@ -288,8 +290,8 @@ const scenarios = {
     };
   },
 
-  async details(browser, traceFile) {
-    const { context, page } = await openApp(browser);
+  async details(browser, traceFile, url) {
+    const { context, page } = await openApp(browser, url);
     await scrollToGrid(page);
     await markStart(page);
     await withTrace(page, traceFile, async () => {
@@ -315,8 +317,8 @@ const scenarios = {
     };
   },
 
-  async scroll(browser, traceFile) {
-    const { context, page } = await openApp(browser);
+  async scroll(browser, traceFile, url) {
+    const { context, page } = await openApp(browser, url);
     await scrollToGrid(page);
     await page.mouse.move(VIEWPORT.width / 2, VIEWPORT.height / 2);
     await markStart(page);
@@ -341,7 +343,7 @@ const scenarios = {
   },
 };
 
-async function runLighthouse(chromePath) {
+async function runLighthouse(chromePath, url) {
   const browser = await puppeteer.launch({
     executablePath: chromePath,
     headless: HEADLESS,
@@ -350,7 +352,7 @@ async function runLighthouse(chromePath) {
   try {
     const page = await browser.newPage();
     const result = await lighthouse(
-      URL,
+      url,
       { output: 'html', logLevel: 'error', onlyCategories: ['performance'], throttlingMethod: 'devtools' },
       desktopConfig,
       page
@@ -387,11 +389,19 @@ function summarize(runs) {
 
 async function main() {
   const chromePath = findChrome();
-  const res = await fetch(URL).catch(() => null);
-  if (!res || !res.ok) {
-    console.error(`Застосунок не відповідає на ${URL}. Запустіть: npm run build && npm run preview`);
-    process.exit(1);
+  for (const url of [URL, BEFORE_URL].filter(Boolean)) {
+    const res = await fetch(url).catch(() => null);
+    if (!res || !res.ok) {
+      console.error(`Застосунок не відповідає на ${url}. Запустіть: npm run build && npm run preview`);
+      process.exit(1);
+    }
   }
+  const versions = BEFORE_URL
+    ? [
+        { key: 'before', url: BEFORE_URL, suffix: '-before' },
+        { key: 'after', url: URL, suffix: '' },
+      ]
+    : [{ key: 'after', url: URL, suffix: '' }];
 
   const browser = await puppeteer.launch({
     executablePath: chromePath,
@@ -410,36 +420,49 @@ async function main() {
     lighthouse: 'Lighthouse Navigation, Desktop, applied (DevTools) throttling: мережа без обмежень, CPU 1x',
     runs: RUNS,
   };
-  console.log(`\n[${label}] ${conditions.browser}, ${RUNS} запусків\n`);
+  console.log(`\n[${label}] ${conditions.browser}, ${RUNS} запусків${BEFORE_URL ? `, по черзі з ${BEFORE_URL}` : ''}\n`);
 
-  const results = { label, conditions, scenarios: {} };
+  const results = { label, conditions, url: URL, scenarios: {} };
+  if (BEFORE_URL) results.before = { url: BEFORE_URL, scenarios: {} };
+  const target = (key) => (key === 'before' ? results.before : results);
+
   try {
     if (ONLY.includes('lighthouse')) {
-      const runs = [];
+      const runs = { before: [], after: [] };
       for (let i = 0; i < RUNS; i++) {
-        runs.push(await runLighthouse(chromePath));
-        console.log(`  lighthouse #${i + 1}: ${Object.entries(runs.at(-1).metrics).map(([k, v]) => fmt(k, v)).join(', ')}`);
+        for (const v of versions) {
+          runs[v.key].push(await runLighthouse(chromePath, v.url));
+          console.log(`  lighthouse ${v.key} #${i + 1}: ${Object.entries(runs[v.key].at(-1).metrics).map(([k, val]) => fmt(k, val)).join(', ')}`);
+        }
       }
-      const med = summarize(runs.map((r) => r.metrics));
-      const closest = runs.reduce((best, r) =>
-        Math.abs(r.metrics.lcp - med.lcp) < Math.abs(best.metrics.lcp - med.lcp) ? r : best
-      );
       await mkdir(join(OUT, 'lighthouse'), { recursive: true });
-      await writeFile(join(OUT, 'lighthouse', `${label}.html`), closest.html);
-      results.scenarios.lighthouse = { median: med, runs: runs.map((r) => r.metrics) };
+      for (const v of versions) {
+        const med = summarize(runs[v.key].map((r) => r.metrics));
+        const closest = runs[v.key].reduce((best, r) =>
+          Math.abs(r.metrics.lcp - med.lcp) < Math.abs(best.metrics.lcp - med.lcp) ? r : best
+        );
+        await writeFile(join(OUT, 'lighthouse', `${label}${v.suffix}.html`), closest.html);
+        target(v.key).scenarios.lighthouse = { median: med, runs: runs[v.key].map((r) => r.metrics) };
+      }
     }
 
     for (const name of ALL.slice(1)) {
       if (!ONLY.includes(name)) continue;
-      if (TRACE) {
-        await scenarios[name](browser, join(OUT, 'traces', `${label}-${name}.json`));
+      if (TRACE.includes(name)) {
+        for (const v of versions) {
+          await scenarios[name](browser, join(OUT, 'traces', `${label}-${name}${v.suffix}.json`), v.url);
+        }
       }
-      const runs = [];
+      const runs = { before: [], after: [] };
       for (let i = 0; i < RUNS; i++) {
-        runs.push(await scenarios[name](browser, null));
-        console.log(`  ${name} #${i + 1}: ${Object.entries(runs.at(-1)).map(([k, v]) => fmt(k, v)).join(', ')}`);
+        for (const v of versions) {
+          runs[v.key].push(await scenarios[name](browser, null, v.url));
+          console.log(`  ${name} ${v.key} #${i + 1}: ${Object.entries(runs[v.key].at(-1)).map(([k, val]) => fmt(k, val)).join(', ')}`);
+        }
       }
-      results.scenarios[name] = { median: summarize(runs), runs };
+      for (const v of versions) {
+        target(v.key).scenarios[name] = { median: summarize(runs[v.key]), runs: runs[v.key] };
+      }
     }
   } finally {
     await browser.close();
@@ -448,9 +471,11 @@ async function main() {
   await mkdir(join(OUT, 'data'), { recursive: true });
   await writeFile(join(OUT, 'data', `${label}.json`), JSON.stringify(results, null, 2));
 
-  console.log(`\nМедіани [${label}]:`);
-  for (const [name, s] of Object.entries(results.scenarios)) {
-    console.log(`  ${name.padEnd(10)} ${Object.entries(s.median).map(([k, v]) => fmt(k, v)).join(' | ')}`);
+  for (const v of versions) {
+    console.log(`\nМедіани [${label}${v.key === 'before' ? ', до' : ''}] ${v.url}:`);
+    for (const [name, s] of Object.entries(target(v.key).scenarios)) {
+      console.log(`  ${name.padEnd(10)} ${Object.entries(s.median).map(([k, val]) => fmt(k, val)).join(' | ')}`);
+    }
   }
   console.log(`\nЗбережено: report/data/${label}.json`);
 }
