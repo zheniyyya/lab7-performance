@@ -400,7 +400,7 @@ h1, h2, h3 {
   font-size: 13px;
 }
 
-.tutor-card.has-more .tutor-card__more {
+.tutor-card[data-has-more] .tutor-card__more {
   display: inline;
 }
 

@@ -1,30 +1,59 @@
 import { useLayoutEffect } from 'react';
 
-function isInViewport(rect) {
-  return rect.bottom > 0 && rect.top < window.innerHeight;
+function measure(bios) {
+  const overflowing = bios.map((bio) => bio.scrollHeight > bio.clientHeight + 1);
+  bios.forEach((bio, i) => {
+    bio.closest('.tutor-card').toggleAttribute('data-has-more', overflowing[i]);
+  });
+}
+
+function onFirstScreen(bios) {
+  const result = [];
+  for (const bio of bios) {
+    const rect = bio.getBoundingClientRect();
+    if (rect.top >= window.innerHeight) break;
+    if (rect.bottom > 0) result.push(bio);
+  }
+  return result;
 }
 
 export function useBioClamp(containerRef, deps) {
   useLayoutEffect(() => {
     const container = containerRef.current;
-    if (!container) return undefined;
+    if (!container || typeof IntersectionObserver === 'undefined') return undefined;
 
-    const update = () => {
-      container.querySelectorAll('.tutor-card__bio').forEach((bio) => {
-        if (!isInViewport(bio.getBoundingClientRect())) return;
-        bio.classList.remove('is-clamped');
-        const fullHeight = bio.offsetHeight;
-        bio.classList.add('is-clamped');
-        bio.closest('.tutor-card').classList.toggle('has-more', fullHeight > bio.offsetHeight + 1);
-      });
+    const bios = [...container.querySelectorAll('.tutor-card__bio')];
+    measure(onFirstScreen(bios));
+
+    const nearViewport = new Set();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entered = [];
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            nearViewport.add(entry.target);
+            entered.push(entry.target);
+          } else {
+            nearViewport.delete(entry.target);
+          }
+        }
+        measure(entered);
+      },
+      { rootMargin: '100% 0px' }
+    );
+    bios.forEach((bio) => observer.observe(bio));
+
+    let frame = 0;
+    const onResize = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => measure([...nearViewport]));
     };
+    window.addEventListener('resize', onResize);
 
-    update();
-    window.addEventListener('scroll', update);
-    window.addEventListener('resize', update);
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', onResize);
     };
   }, deps);
 }
